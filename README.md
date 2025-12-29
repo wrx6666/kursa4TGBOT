@@ -31,7 +31,7 @@ HobbyGuide - это многофункциональный Telegram бот дл�
 
  Управление отзывами
 
-🛠 Технологии
+Технологии
 Python 3.8+
 
 pyTelegramBotAPI - для работы с Telegram API
@@ -53,109 +53,7 @@ hobbyguide-bot/
 1. Установка зависимостей
 bash
 pip install pyTelegramBotAPI pymysql
-2. Настройка базы данных
-Создайте базу данных:
 
-sql
-CREATE DATABASE kurs1111;
-Создайте необходимые таблицы:
-
-sql
--- users - информация о пользователях
-CREATE TABLE users (
-    id INT PRIMARY KEY,
-    username VARCHAR(255),
-    first_name VARCHAR(255),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--- circles - информация о кружках
-CREATE TABLE circles (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    description TEXT,
-    duration INT,
-    min_players INT,
-    max_players INT,
-    difficulty VARCHAR(50),
-    price DECIMAL(10,2),
-    address VARCHAR(500),
-    genre VARCHAR(100),
-    image_url VARCHAR(500),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--- bookings - записи на занятия
-CREATE TABLE bookings (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT,
-    quest_id INT,
-    date DATE,
-    time TIME,
-    players INT,
-    prepayment BOOLEAN DEFAULT FALSE,
-    status ENUM('pending', 'confirmed', 'cancelled', 'completed') DEFAULT 'pending',
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (quest_id) REFERENCES circles(id)
-);
-
--- promotions - акции и скидки
-CREATE TABLE promotions (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(255) NOT NULL,
-    description TEXT,
-    discount DECIMAL(10,2),
-    quest_id INT,
-    valid_until DATE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (quest_id) REFERENCES circles(id)
-);
-
--- reviews - отзывы пользователей
-CREATE TABLE reviews (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT,
-    booking_id INT,
-    quest_id INT,
-    review TEXT,
-    admin_response TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (booking_id) REFERENCES bookings(id),
-    FOREIGN KEY (quest_id) REFERENCES circles(id)
-);
-
--- support_messages - вопросы в поддержку
-CREATE TABLE support_messages (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT,
-    message TEXT,
-    response TEXT,
-    answered_at TIMESTAMP NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id)
-);
-
--- subscribers - подписчики на рассылку
-CREATE TABLE subscribers (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT UNIQUE,
-    first_name VARCHAR(255),
-    subscribed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id)
-);
-
--- products - рекомендованные товары для кружков
-CREATE TABLE products (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    quest_id INT,
-    name VARCHAR(255) NOT NULL,
-    price DECIMAL(10,2),
-    description TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (quest_id) REFERENCES circles(id)
-);
 3. Конфигурация бота
 В файле bot.py настройте следующие параметры в начале файла:
 
